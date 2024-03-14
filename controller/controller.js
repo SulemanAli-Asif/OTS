@@ -1,6 +1,17 @@
 const User = require('../Schema/users')
 const passport = require('passport')
 
+exports.get_home =  (req,res)=>{
+    const user = req.user;
+    var locals = {
+        title: 'Online Testing Service',
+        description: 'Page Description',
+        header: 'Page Header',
+        user: user
+    }
+    res.render("index",locals);
+}
+
 exports.get_signup = (req,res)=>{
     var locals = {
         title: 'Sign-up',
@@ -15,8 +26,6 @@ exports.post_signup = async (req,res) =>{
     const {username,email,password} = req.body;
     try{
 
-        console.log('Request Body:', req.body);
-        console.log(password);
         if (!username || username.trim() === '') {
             throw new Error('Username is required!');
         }
@@ -28,11 +37,43 @@ exports.post_signup = async (req,res) =>{
         
         await User.register(user,password);
        
-         res.send('Signin successfully');
+         res.redirect('login');
     }
     catch(err)
     {
        console.log(err);
        res.send(err.message).status(400)
+    }
+}
+
+exports.get_login = (req,res)=>{
+    var locals = {
+        title: 'Log-in',
+        description: 'Login page',
+        header: 'Page Header'
+    }
+
+    res.render('login',locals)
+}
+
+exports.post_login = async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).send("User doesn't exist");
+        }
+        const isMatch = await user.authenticate(password);
+        if (isMatch) {
+            req.session.user = user; // Store user information in session
+            return res.redirect('/profile');
+        }
+        // Password does not match
+        console.log("Password does not match");
+        return res.status(401).json({ message: "Invalid email or password" });
+    } catch (err) {
+        // Handle errors properly
+        console.error(err);
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 }
