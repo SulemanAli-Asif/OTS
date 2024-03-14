@@ -7,6 +7,7 @@ const passport = require("passport");
 const MongoStore = require("connect-mongo");
 const session = require("express-session");
 require("dotenv").config();
+const passport_setup = require('./config/passport-config');
 
 const PORT = process.env.PORT || 5000;
 

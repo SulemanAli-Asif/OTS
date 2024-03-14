@@ -2,13 +2,12 @@ const express = require('express');
 const { get_signup, post_signup,get_login,post_login, get_home} = require('../controller/controller');
 // const isAuthenticated = require('../middlewares/isAuthenticated');
 const router = express.Router();
-
+const passport = require('passport')
 
 function isAuth(req,res,next){
-    console.log("Session:",req.session,"the user:",req.user)
-    if(req.isAuthenticated())
+
+   if(req.isAuthenticated())
     {
-        console.log("User is authenticated:", req.user);
         return next();
     }
     console.log("User is not authenticated");
@@ -29,7 +28,7 @@ router.post('/signup',post_signup);
 router.get('/login',get_login);
 
 //post request from login page.
-router.post('/login',post_login)
+router.post('/login', passport.authenticate('local'),post_login) //this shitty middleware made me work on it for 4 f'ing hrs 
 
 //get the test pages.
 router.get('/tests',isAuth,(req,res)=>{
@@ -37,6 +36,6 @@ router.get('/tests',isAuth,(req,res)=>{
 })
 
 router.get('/profile',isAuth,(req,res)=>{
-    res.send('profile');
+    res.render('profile');
 })
 module.exports = router;

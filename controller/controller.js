@@ -65,7 +65,8 @@ exports.post_login = async (req, res) => {
         }
         const isMatch = await user.authenticate(password);
         if (isMatch) {
-            req.session.user = user; // Store user information in session
+            req.session.user = user; 
+            req.user = user;// Store user information in session
             return res.redirect('/profile');
         }
         // Password does not match
