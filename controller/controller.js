@@ -2,6 +2,7 @@ const User = require('../Schema/users')
 const passport = require('passport')
 
 exports.get_home =  (req,res)=>{
+    console.log("User:" ,req.user);
     const user = req.user;
     var locals = {
         title: 'Online Testing Service',
@@ -13,10 +14,12 @@ exports.get_home =  (req,res)=>{
 }
 
 exports.get_signup = (req,res)=>{
+    const user = req.user;
     var locals = {
-        title: 'Sign-up',
-        description: 'Sign-up page',
-        header: 'Page Header'
+        title: 'Online Testing Service',
+        description: 'Page Description',
+        header: 'Page Header',
+        user: user
     }
 
     res.render('signup',locals)
@@ -47,12 +50,14 @@ exports.post_signup = async (req,res) =>{
 }
 
 exports.get_login = (req,res)=>{
-    var locals = {
-        title: 'Log-in',
-        description: 'Login page',
-        header: 'Page Header'
-    }
+    const user = req.session.user;
 
+    var locals = {
+        title: 'Online Testing Service',
+        description: 'Page Description',
+        header: 'Page Header',
+        user: user
+    }
     res.render('login',locals)
 }
 
@@ -67,14 +72,43 @@ exports.post_login = async (req, res) => {
         if (isMatch) {
             req.session.user = user; 
             req.user = user;// Store user information in session
-            return res.redirect('/profile');
+            console.log(req.user)
+         res.redirect('/profile');
         }
-        // Password does not match
-        console.log("Password does not match");
-        return res.status(401).json({ message: "Invalid email or password" });
+       
     } catch (err) {
         // Handle errors properly
+         // Password does not match
+         console.log("Password does not match");
+         return res.status(401).json({ message: "Invalid email or password" });
         console.error(err);
         return res.status(500).json({ message: "Internal Server Error" });
     }
+}
+
+exports.get_profile = (req,res)=>{
+    console.log(req.session);
+    const user = req.session.user;
+    var locals = {
+        title: 'Online Testing Service',
+        description: 'Page Description',
+        header: 'Page Header',
+        user: user
+    }
+    res.render('profile',locals);
+
+}
+
+
+exports.get_test = (req,res)=>{
+    const user = req.session.user;
+    console.log(user);
+    var locals = {
+        title: 'Online Testing Service',
+        description: 'Page Description',
+        header: 'Page Header',
+        user: user
+    }
+    res.render('test',locals);
+
 }

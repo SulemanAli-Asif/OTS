@@ -1,18 +1,8 @@
 const express = require('express');
-const { get_signup, post_signup,get_login,post_login, get_home} = require('../controller/controller');
-// const isAuthenticated = require('../middlewares/isAuthenticated');
+const { get_signup, post_signup,get_login,post_login, get_home, get_profile, get_test} = require('../controller/controller');
+const {isAuth} = require('../middlewares/isAuthenticated');
 const router = express.Router();
 const passport = require('passport')
-
-function isAuth(req,res,next){
-
-   if(req.isAuthenticated())
-    {
-        return next();
-    }
-    console.log("User is not authenticated");
-    res.redirect('/login')
-}
 
 // module.exports = isAuthenticated;
 //getting the home route.
@@ -31,11 +21,14 @@ router.get('/login',get_login);
 router.post('/login', passport.authenticate('local'),post_login) //this shitty middleware made me work on it for 4 f'ing hrs 
 
 //get the test pages.
-router.get('/tests',isAuth,(req,res)=>{
-    res.render("test")
-})
+router.get('/tests',isAuth,get_test)
 
-router.get('/profile',isAuth,(req,res)=>{
-    res.render('profile');
-})
+router.get('/profile',isAuth,get_profile)
+
+router.get('/logout', function(req, res, next) {
+    req.logout(function(err) {
+      if (err) { return next(err); }
+      res.redirect('/');
+    });
+  });
 module.exports = router;

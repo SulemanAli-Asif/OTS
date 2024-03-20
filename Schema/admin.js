@@ -8,7 +8,6 @@ const adminSchema = new mongoose.Schema({
     },
     password:{
         type:String,
-        required:true,
         minlength:8,
     },
     role:{
@@ -20,4 +19,4 @@ const adminSchema = new mongoose.Schema({
 
 adminSchema.plugin(passportLocalMongoose, { usernameField: 'userName' });
 
-module.exports = mongoose.model('User', adminSchema);
+module.exports = mongoose.model('admin', adminSchema);
