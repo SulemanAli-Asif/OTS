@@ -10,8 +10,12 @@ module.exports.isAuth = (req, res, next) => {
 
  
  module.exports.isAdmin = (req,res,next)=>{
-    if(req.isAuthenticated()&& req.user.role ==='admin' )
+    console.log("Session:",req.session);
+    console.log("User:",req.user);
+    console.log("userin the session is:",req.session.user)
+    if(req.isAuthenticated()&& req.session.user.role ==='admin' )
     {
+        
         return next();
     }
     res.status(403).send('Forbidden');

@@ -7,7 +7,7 @@ const Admin = require('../Schema/admin');
 passport.use('local', new LocalStrategy({ usernameField: 'email' }, User.authenticate()));
 
 // Admin authentication strategy
-passport.use('admin', new LocalStrategy({ usernameField: 'userName' }, Admin.authenticate()));
+passport.use('admin', new LocalStrategy({ usernameField: 'username' }, Admin.authenticate()));
 
 // Serialize and deserialize User
 passport.serializeUser(User.serializeUser());

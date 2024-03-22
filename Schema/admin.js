@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose')
 
 const adminSchema = new mongoose.Schema({
-    userName:{
+    username:{
         type:String,
         required:true
     },
@@ -17,6 +17,6 @@ const adminSchema = new mongoose.Schema({
     }
 });
 
-adminSchema.plugin(passportLocalMongoose, { usernameField: 'userName' });
+adminSchema.plugin(passportLocalMongoose, { usernameField: 'username' });
 
 module.exports = mongoose.model('admin', adminSchema);
